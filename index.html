@@ -3,319 +3,109 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nithiesh Thennarasu — Product Portfolio</title>
+<title>Nithiesh Thennarasu — API Integration & Business Analysis Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --ink:     #0D0D0D;
-    --ink-2:   #3A3A3A;
-    --ink-3:   #7A7A7A;
-    --paper:   #F9F7F4;
-    --paper-2: #F0EDE8;
-    --accent:  #1A4FBF;
-    --accent-2:#E8F0FF;
-    --rule:    #D8D3CC;
-    --serif:   'DM Serif Display', Georgia, serif;
-    --sans:    'DM Sans', sans-serif;
-    --mono:    'DM Mono', monospace;
-    --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+    --ink:#0D0D0D; --ink-2:#3A3A3A; --ink-3:#7A7A7A;
+    --paper:#F9F7F4; --paper-2:#F0EDE8; --accent:#1A4FBF;
+    --accent-2:#E8F0FF; --rule:#D8D3CC;
+    --serif:'DM Serif Display',Georgia,serif;
+    --sans:'DM Sans',sans-serif; --mono:'DM Mono',monospace;
+    --ease:cubic-bezier(0.16,1,0.3,1);
   }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: var(--sans);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 15px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 48px;
-    background: rgba(249,247,244,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--rule);
-  }
-  .nav-logo {
-    font-family: var(--serif); font-size: 18px; color: var(--ink);
-    text-decoration: none; letter-spacing: -0.3px;
-  }
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a {
-    font-size: 13px; font-weight: 500; color: var(--ink-3);
-    text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--accent); }
-
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 0 48px 72px;
-    border-bottom: 1px solid var(--rule);
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-eyebrow {
-    font-family: var(--mono); font-size: 12px; color: var(--accent);
-    letter-spacing: 0.12em; text-transform: uppercase;
-    margin-bottom: 20px;
-    opacity: 0; animation: fadeUp 0.8s var(--ease) 0.2s forwards;
-  }
-  .hero-name {
-    font-family: var(--serif); font-size: clamp(52px, 8vw, 96px);
-    line-height: 0.95; letter-spacing: -2px; color: var(--ink);
-    margin-bottom: 28px;
-    opacity: 0; animation: fadeUp 0.9s var(--ease) 0.35s forwards;
-  }
-  .hero-name em { color: var(--accent); font-style: italic; }
-  .hero-desc {
-    max-width: 560px; font-size: 16px; color: var(--ink-2);
-    font-weight: 300; line-height: 1.75;
-    opacity: 0; animation: fadeUp 0.9s var(--ease) 0.5s forwards;
-  }
-  .hero-meta {
-    display: flex; gap: 40px; margin-top: 48px;
-    opacity: 0; animation: fadeUp 0.9s var(--ease) 0.65s forwards;
-  }
-  .hero-stat { display: flex; flex-direction: column; gap: 4px; }
-  .hero-stat-num {
-    font-family: var(--serif); font-size: 32px; color: var(--ink);
-    letter-spacing: -1px;
-  }
-  .hero-stat-label {
-    font-size: 11px; font-weight: 500; color: var(--ink-3);
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .hero-scroll {
-    position: absolute; bottom: 32px; right: 48px;
-    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
-    letter-spacing: 0.08em; writing-mode: vertical-rl;
-    opacity: 0; animation: fadeIn 1s var(--ease) 1.2s forwards;
-  }
-  .hero-bg-text {
-    position: absolute; top: 50%; right: -20px; transform: translateY(-50%);
-    font-family: var(--serif); font-size: clamp(160px, 22vw, 280px);
-    color: var(--paper-2); line-height: 1; pointer-events: none;
-    user-select: none; white-space: nowrap; z-index: 0;
-  }
-  .hero > *:not(.hero-bg-text) { position: relative; z-index: 1; }
-
-  section { padding: 96px 48px; border-bottom: 1px solid var(--rule); }
-  .section-label {
-    font-family: var(--mono); font-size: 11px; color: var(--accent);
-    letter-spacing: 0.14em; text-transform: uppercase;
-    margin-bottom: 16px; display: block;
-  }
-  .section-title {
-    font-family: var(--serif); font-size: clamp(32px, 4vw, 48px);
-    line-height: 1.1; letter-spacing: -1px; color: var(--ink);
-    margin-bottom: 48px;
-  }
-
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
-    align-items: start;
-  }
-  .about-text p {
-    color: var(--ink-2); font-weight: 300; font-size: 15.5px;
-    line-height: 1.8; margin-bottom: 16px;
-  }
-  .about-skills { display: flex; flex-direction: column; gap: 0; }
-  .skill-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 0; border-bottom: 1px solid var(--rule);
-  }
-  .skill-row:first-child { border-top: 1px solid var(--rule); }
-  .skill-name { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .skill-bar {
-    width: 120px; height: 2px; background: var(--rule); border-radius: 1px;
-    position: relative; overflow: hidden;
-  }
-  .skill-fill {
-    position: absolute; left: 0; top: 0; height: 100%;
-    background: var(--accent); border-radius: 1px;
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 1s var(--ease);
-  }
-  .skill-row.visible .skill-fill { transform: scaleX(1); }
-
-  .cases { display: flex; flex-direction: column; gap: 2px; }
-  .case-card {
-    background: var(--paper); border: 1px solid var(--rule);
-    border-radius: 4px; overflow: hidden;
-    transition: border-color 0.25s, box-shadow 0.25s;
-    cursor: pointer;
-  }
-  .case-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 8px 40px rgba(26,79,191,0.08);
-  }
-  .case-header {
-    display: grid; grid-template-columns: 64px 1fr auto;
-    align-items: center; gap: 24px; padding: 28px 32px;
-  }
-  .case-num {
-    font-family: var(--serif); font-size: 36px; color: var(--paper-2);
-    line-height: 1; font-style: italic;
-  }
-  .case-meta { display: flex; flex-direction: column; gap: 4px; }
-  .case-company {
-    font-family: var(--mono); font-size: 11px; color: var(--accent);
-    letter-spacing: 0.1em; text-transform: uppercase;
-  }
-  .case-title {
-    font-family: var(--serif); font-size: 22px; color: var(--ink);
-    letter-spacing: -0.4px;
-  }
-  .case-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-  .tag {
-    font-size: 11px; font-weight: 500; padding: 4px 10px;
-    border: 1px solid var(--rule); border-radius: 2px;
-    color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em;
-    background: var(--paper-2);
-  }
-  .case-body {
-    display: none; padding: 0 32px 28px 120px; color: var(--ink-2);
-    font-weight: 300; line-height: 1.8; font-size: 14.5px;
-  }
-  .case-body.open { display: block; }
-  .case-body-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
-    margin-top: 20px;
-  }
-  .case-col-label {
-    font-family: var(--mono); font-size: 10px; color: var(--accent);
-    letter-spacing: 0.12em; text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .case-col p { font-size: 13.5px; color: var(--ink-2); line-height: 1.7; }
-  .case-chevron {
-    width: 24px; height: 24px; color: var(--ink-3);
-    transition: transform 0.3s var(--ease);
-    flex-shrink: 0;
-  }
-  .case-card.open .case-chevron { transform: rotate(180deg); }
-  .case-outcome {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--accent-2); color: var(--accent);
-    font-size: 12px; font-weight: 600; padding: 6px 12px;
-    border-radius: 2px; margin-top: 16px;
-  }
-
-  .samples-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-  }
-  .sample-card {
-    border: 1px solid var(--rule); border-radius: 4px; overflow: hidden;
-    transition: transform 0.3s var(--ease), box-shadow 0.3s;
-  }
-  .sample-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.08);
-  }
-  .sample-preview {
-    height: 180px; display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .sample-preview.bpmn { background: #EEF4FF; }
-  .sample-preview.api  { background: #0D0D0D; }
-  .sample-preview.pbi  { background: #F3F0EB; }
-  .sample-preview.gh   { background: #0D1117; }
-  .sample-info { padding: 20px 24px; }
-  .sample-type {
-    font-family: var(--mono); font-size: 10px; color: var(--accent);
-    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px;
-  }
-  .sample-title {
-    font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px;
-  }
-  .sample-desc { font-size: 13px; color: var(--ink-3); line-height: 1.6; }
-
-  .bpmn-svg { width: 100%; padding: 16px; }
-  .api-mock {
-    font-family: var(--mono); font-size: 10px; color: #7EE787;
-    text-align: left; padding: 16px; line-height: 1.7; width: 100%;
-  }
-  .api-mock .dim { color: #484F58; }
-  .api-mock .key { color: #79C0FF; }
-  .api-mock .str { color: #A5D6FF; }
-  .api-mock .num { color: #F2CC60; }
-  .pbi-bars { width: 100%; padding: 20px; }
-  .gh-preview {
-    font-family: var(--mono); font-size: 10px; color: #C9D1D9;
-    text-align: left; padding: 16px; line-height: 1.7; width: 100%;
-  }
-  .gh-preview .green { color: #3FB950; }
-  .gh-preview .blue  { color: #58A6FF; }
-  .gh-preview .grey  { color: #484F58; }
-
-  .contact-inner {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
-  }
-  .contact-left h2 {
-    font-family: var(--serif); font-size: clamp(36px, 5vw, 56px);
-    line-height: 1.05; letter-spacing: -1.5px; color: var(--ink);
-    margin-bottom: 20px;
-  }
-  .contact-left p {
-    font-size: 15px; color: var(--ink-2); font-weight: 300; line-height: 1.8;
-  }
-  .contact-links { display: flex; flex-direction: column; gap: 16px; }
-  .contact-link {
-    display: flex; align-items: center; gap: 16px;
-    padding: 20px 24px; border: 1px solid var(--rule); border-radius: 4px;
-    text-decoration: none; color: var(--ink);
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .contact-link:hover { border-color: var(--accent); background: var(--accent-2); }
-  .contact-link-icon {
-    width: 36px; height: 36px; background: var(--paper-2);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .contact-link-text { display: flex; flex-direction: column; gap: 2px; }
-  .contact-link-label {
-    font-size: 11px; font-weight: 500; color: var(--ink-3);
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .contact-link-value { font-size: 14px; font-weight: 500; color: var(--ink); }
-
-  footer {
-    padding: 32px 48px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  footer p { font-size: 12px; color: var(--ink-3); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
-  .reveal {
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero, section { padding-left: 24px; padding-right: 24px; }
-    .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
-    .samples-grid { grid-template-columns: 1fr; }
-    .case-body { padding-left: 32px; }
-    .case-body-grid { grid-template-columns: 1fr; }
-    .hero-bg-text { font-size: 120px; right: -40px; }
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(249,247,244,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+  .nav-logo{font-family:var(--serif);font-size:18px;color:var(--ink);text-decoration:none;letter-spacing:-0.3px;}
+  .nav-links{display:flex;gap:32px;list-style:none;}
+  .nav-links a{font-size:13px;font-weight:500;color:var(--ink-3);text-decoration:none;letter-spacing:0.04em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--accent);}
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 72px;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
+  .hero-eyebrow{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp 0.8s var(--ease) 0.2s forwards;}
+  .hero-name{font-family:var(--serif);font-size:clamp(52px,8vw,96px);line-height:0.95;letter-spacing:-2px;color:var(--ink);margin-bottom:28px;opacity:0;animation:fadeUp 0.9s var(--ease) 0.35s forwards;}
+  .hero-name em{color:var(--accent);font-style:italic;}
+  .hero-desc{max-width:560px;font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;opacity:0;animation:fadeUp 0.9s var(--ease) 0.5s forwards;}
+  .hero-meta{display:flex;gap:40px;margin-top:48px;opacity:0;animation:fadeUp 0.9s var(--ease) 0.65s forwards;}
+  .hero-stat{display:flex;flex-direction:column;gap:4px;}
+  .hero-stat-num{font-family:var(--serif);font-size:32px;color:var(--ink);letter-spacing:-1px;}
+  .hero-stat-label{font-size:11px;font-weight:500;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.08em;}
+  .hero-scroll{position:absolute;bottom:32px;right:48px;font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0.08em;writing-mode:vertical-rl;opacity:0;animation:fadeIn 1s var(--ease) 1.2s forwards;}
+  .hero-bg-text{position:absolute;top:50%;right:-20px;transform:translateY(-50%);font-family:var(--serif);font-size:clamp(160px,22vw,280px);color:var(--paper-2);line-height:1;pointer-events:none;user-select:none;white-space:nowrap;z-index:0;}
+  .hero>*:not(.hero-bg-text){position:relative;z-index:1;}
+  section{padding:96px 48px;border-bottom:1px solid var(--rule);}
+  .section-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;display:block;}
+  .section-title{font-family:var(--serif);font-size:clamp(32px,4vw,48px);line-height:1.1;letter-spacing:-1px;color:var(--ink);margin-bottom:48px;}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+  .about-text p{color:var(--ink-2);font-weight:300;font-size:15.5px;line-height:1.8;margin-bottom:16px;}
+  .about-skills{display:flex;flex-direction:column;gap:0;}
+  .skill-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--rule);}
+  .skill-row:first-child{border-top:1px solid var(--rule);}
+  .skill-name{font-size:13px;font-weight:500;color:var(--ink);}
+  .skill-bar{width:120px;height:2px;background:var(--rule);border-radius:1px;position:relative;overflow:hidden;}
+  .skill-fill{position:absolute;left:0;top:0;height:100%;background:var(--accent);border-radius:1px;transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease);}
+  .skill-row.visible .skill-fill{transform:scaleX(1);}
+  .cases{display:flex;flex-direction:column;gap:2px;}
+  .case-card{background:var(--paper);border:1px solid var(--rule);border-radius:4px;overflow:hidden;transition:border-color 0.25s,box-shadow 0.25s;cursor:pointer;}
+  .case-card:hover{border-color:var(--accent);box-shadow:0 8px 40px rgba(26,79,191,0.08);}
+  .case-header{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:24px;padding:28px 32px;}
+  .case-num{font-family:var(--serif);font-size:36px;color:var(--paper-2);line-height:1;font-style:italic;}
+  .case-meta{display:flex;flex-direction:column;gap:4px;}
+  .case-company{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;}
+  .case-title{font-family:var(--serif);font-size:22px;color:var(--ink);letter-spacing:-0.4px;}
+  .case-tags{display:flex;gap:8px;flex-wrap:wrap;}
+  .tag{font-size:11px;font-weight:500;padding:4px 10px;border:1px solid var(--rule);border-radius:2px;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.06em;background:var(--paper-2);}
+  .case-body{display:none;padding:0 32px 28px 120px;color:var(--ink-2);font-weight:300;line-height:1.8;font-size:14.5px;}
+  .case-body.open{display:block;}
+  .case-body-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:20px;}
+  .case-col-label{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+  .case-col p{font-size:13.5px;color:var(--ink-2);line-height:1.7;}
+  .case-chevron{width:24px;height:24px;color:var(--ink-3);transition:transform 0.3s var(--ease);flex-shrink:0;}
+  .case-card.open .case-chevron{transform:rotate(180deg);}
+  .case-outcome{display:inline-flex;align-items:center;gap:6px;background:var(--accent-2);color:var(--accent);font-size:12px;font-weight:600;padding:6px 12px;border-radius:2px;margin-top:16px;}
+  .samples-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .sample-card{border:1px solid var(--rule);border-radius:4px;overflow:hidden;transition:transform 0.3s var(--ease),box-shadow 0.3s;}
+  .sample-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.08);}
+  .sample-preview{height:180px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+  .sample-preview.bpmn{background:#EEF4FF;}
+  .sample-preview.api{background:#0D0D0D;}
+  .sample-preview.pbi{background:#F3F0EB;}
+  .sample-preview.gh{background:#0D1117;}
+  .sample-info{padding:20px 24px;}
+  .sample-type{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;}
+  .sample-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .sample-desc{font-size:13px;color:var(--ink-3);line-height:1.6;}
+  .bpmn-svg{width:100%;padding:16px;}
+  .api-mock{font-family:var(--mono);font-size:10px;color:#7EE787;text-align:left;padding:16px;line-height:1.7;width:100%;}
+  .api-mock .dim{color:#484F58;} .api-mock .key{color:#79C0FF;} .api-mock .str{color:#A5D6FF;} .api-mock .num{color:#F2CC60;}
+  .pbi-bars{width:100%;padding:20px;}
+  .gh-preview{font-family:var(--mono);font-size:10px;color:#C9D1D9;text-align:left;padding:16px;line-height:1.7;width:100%;}
+  .gh-preview .green{color:#3FB950;} .gh-preview .blue{color:#58A6FF;} .gh-preview .grey{color:#484F58;}
+  .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+  .contact-left h2{font-family:var(--serif);font-size:clamp(36px,5vw,56px);line-height:1.05;letter-spacing:-1.5px;color:var(--ink);margin-bottom:20px;}
+  .contact-left p{font-size:15px;color:var(--ink-2);font-weight:300;line-height:1.8;}
+  .contact-links{display:flex;flex-direction:column;gap:16px;}
+  .contact-link{display:flex;align-items:center;gap:16px;padding:20px 24px;border:1px solid var(--rule);border-radius:4px;text-decoration:none;color:var(--ink);transition:border-color 0.2s,background 0.2s;}
+  .contact-link:hover{border-color:var(--accent);background:var(--accent-2);}
+  .contact-link-icon{width:36px;height:36px;background:var(--paper-2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .contact-link-text{display:flex;flex-direction:column;gap:2px;}
+  .contact-link-label{font-size:11px;font-weight:500;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.08em;}
+  .contact-link-value{font-size:14px;font-weight:500;color:var(--ink);}
+  footer{padding:32px 48px;display:flex;align-items:center;justify-content:space-between;}
+  footer p{font-size:12px;color:var(--ink-3);}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.8s var(--ease),transform 0.8s var(--ease);}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  @media(max-width:768px){
+    nav{padding:16px 24px;} .nav-links{display:none;}
+    .hero,section{padding-left:24px;padding-right:24px;}
+    .about-grid,.contact-inner{grid-template-columns:1fr;gap:40px;}
+    .samples-grid{grid-template-columns:1fr;}
+    .case-body{padding-left:32px;} .case-body-grid{grid-template-columns:1fr;}
+    .hero-bg-text{font-size:120px;right:-40px;}
   }
 </style>
 </head>
@@ -332,31 +122,31 @@
 </nav>
 
 <section class="hero">
-  <div class="hero-bg-text">PM</div>
-  <p class="hero-eyebrow">Product Manager · Business Analyst · Implementation Engineer</p>
+  <div class="hero-bg-text">API</div>
+  <p class="hero-eyebrow">API Integration Specialist · Senior Business Analyst · Implementation Engineer</p>
   <h1 class="hero-name">Nithiesh<br/><em>Thennarasu</em></h1>
-  <p class="hero-desc">I turn complex enterprise problems into shipped products. 6+ years bridging engineering and business across fintech, payments, and global platforms — from IBM mainframes serving 140 countries to credit analytics at Moody's.</p>
+  <p class="hero-desc">I integrate complex financial data APIs into enterprise systems and turn ambiguous business problems into shipped solutions. 6+ years across fintech, credit risk, and global financial platforms — from Moody's API suite to IBM mainframes serving 140 countries.</p>
   <div class="hero-meta">
     <div class="hero-stat"><span class="hero-stat-num">6+</span><span class="hero-stat-label">Years Experience</span></div>
-    <div class="hero-stat"><span class="hero-stat-num">140+</span><span class="hero-stat-label">Countries Impacted</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">10+</span><span class="hero-stat-label">API Products Integrated</span></div>
     <div class="hero-stat"><span class="hero-stat-num">~40%</span><span class="hero-stat-label">Reporting Efficiency Gain</span></div>
-    <div class="hero-stat"><span class="hero-stat-num">5</span><span class="hero-stat-label">Companies · 3 Industries</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">140+</span><span class="hero-stat-label">Countries Impacted</span></div>
   </div>
   <span class="hero-scroll">Scroll to explore ↓</span>
 </section>
 
 <section id="about">
   <span class="section-label reveal">01 — About</span>
-  <h2 class="section-title reveal">Product thinking,<br/>engineering roots.</h2>
+  <h2 class="section-title reveal">API-first thinking,<br/>engineering roots.</h2>
   <div class="about-grid">
     <div class="about-text reveal">
-      <p>I started as an electrical engineer, moved into network infrastructure, then discovered that the most interesting problems weren't technical — they were about getting the right people to build the right things in the right order. That's what drew me to product.</p>
-      <p>At IBM I owned a global invoicing platform used in 140+ countries. At TMF Group I redesigned a client onboarding workflow that cut delivery time from 3 weeks to 5 days. Now at Moody's Analytics I'm on the implementation side of enterprise credit risk platforms, which keeps me close to both the product and the customer.</p>
-      <p>My edge is that I can read a BPMN diagram, write a SQL query, review an API spec, and present to a CFO — all in the same week. I speak engineer and I speak stakeholder.</p>
+      <p>I started as an electrical engineer, moved into network infrastructure, then discovered that the most interesting problems weren't technical — they were about connecting the right systems, for the right clients, in the right way. That's what drew me to API integration and business analysis.</p>
+      <p>At Moody's Analytics I lead end-to-end integration of the full API suite — EVA, MaxSight, Sanctions 360, Orbis, and KYC API — into enterprise client systems across banking and financial services. At IBM I owned a global invoicing platform used in 140+ countries, eliminating ~40% of manual reporting through Power BI automation.</p>
+      <p>My edge: I can diagnose a failing API endpoint, write a SQL reconciliation query, map a BPMN process flow, and present findings to a CFO — all in the same week. I speak engineer and I speak stakeholder.</p>
     </div>
     <div class="about-skills reveal">
-      <div class="skill-row"><span class="skill-name">Requirements & User Stories</span><div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div></div>
-      <div class="skill-row"><span class="skill-name">API Design & Integration</span><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div>
+      <div class="skill-row"><span class="skill-name">REST API Integration</span><div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div></div>
+      <div class="skill-row"><span class="skill-name">Requirements & User Stories</span><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
       <div class="skill-row"><span class="skill-name">Stakeholder Management</span><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
       <div class="skill-row"><span class="skill-name">Data & Power BI</span><div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div></div>
       <div class="skill-row"><span class="skill-name">Agile / Scrum</span><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
@@ -366,7 +156,7 @@
   </div>
 </section>
 
-<section id="cases" style="background: var(--paper-2);">
+<section id="cases" style="background:var(--paper-2);">
   <span class="section-label reveal">02 — Case Studies</span>
   <h2 class="section-title reveal">Problems I've solved.<br/>Results I've shipped.</h2>
   <div class="cases reveal">
@@ -374,6 +164,29 @@
     <div class="case-card" onclick="toggleCase(this)">
       <div class="case-header">
         <span class="case-num">01</span>
+        <div class="case-meta">
+          <span class="case-company">Moody's Analytics</span>
+          <span class="case-title">Enterprise API Integration — Full Product Suite</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div class="case-tags"><span class="tag">REST API</span><span class="tag">KYC / AML</span><span class="tag">Fintech</span></div>
+          <svg class="case-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="case-body">
+        <p>At Moody's Analytics I lead end-to-end API integration of the full product suite — Entity Verification API (EVA), MaxSight, Sanctions 360, Orbis, and KYC API — into enterprise client systems across banking, insurance, and compliance-heavy industries. Every integration involves navigating complex regulatory requirements, varied client tech stacks, and tight go-live timelines.</p>
+        <div class="case-body-grid">
+          <div class="case-col"><p class="case-col-label">Problem</p><p>Enterprise clients struggled to integrate Moody's APIs independently — authentication failures, schema mismatches, missing use cases, and no standardised onboarding process meant lengthy delays and repeated back-and-forth.</p></div>
+          <div class="case-col"><p class="case-col-label">What I did</p><p>Built a Postman library of 50+ use cases covering all products. Redesigned intake and verification workflows end-to-end. Advised clients on OAuth 2.0, rate limiting, retry logic, and error handling. Performed structured root cause analysis on failing endpoints across auth, schema, and network layers.</p></div>
+          <div class="case-col"><p class="case-col-label">Outcome</p><p>Onboarding time cut from 3 weeks to 5 days. P1 incidents resolved within 48 hours. Postman library adopted as team standard. 3 API enhancement requests fed back into the product roadmap from recurring client pain points.</p></div>
+        </div>
+        <span class="case-outcome">↓ 76% reduction in onboarding time · 48hr P1 resolution</span>
+      </div>
+    </div>
+
+    <div class="case-card" onclick="toggleCase(this)">
+      <div class="case-header">
+        <span class="case-num">02</span>
         <div class="case-meta">
           <span class="case-company">IBM International Services Centre</span>
           <span class="case-title">Global Invoicing Platform Transformation</span>
@@ -387,31 +200,31 @@
         <p>IBM's global invoicing platform processed billing for commercial operations across 140+ countries. Manual reporting required analysts to compile data from multiple mainframe sources every week — error-prone, slow, and invisible to leadership until something broke.</p>
         <div class="case-body-grid">
           <div class="case-col"><p class="case-col-label">Problem</p><p>Manual reconciliation across 8 downstream systems took 10+ hours per week per analyst. No real-time visibility. Post-deployment issues took days to diagnose.</p></div>
-          <div class="case-col"><p class="case-col-label">What I did</p><p>Mapped all E2E data flows in BPMN. Designed and built automated Power BI dashboards pulling from IBM DB2. Led UAT and disaster recovery test plans. Managed backlog and 3 major releases.</p></div>
-          <div class="case-col"><p class="case-col-label">Outcome</p><p>~40% reduction in manual reporting effort. Real-time executive visibility. Zero critical defects across 3 platform releases. Selected for IBM Academy of Technology cohort.</p></div>
+          <div class="case-col"><p class="case-col-label">What I did</p><p>Mapped all E2E data flows in BPMN. Built automated Power BI dashboards pulling from IBM DB2. Led UAT and disaster recovery test plans. Managed backlog and 3 major releases.</p></div>
+          <div class="case-col"><p class="case-col-label">Outcome</p><p>~40% reduction in manual reporting effort. Real-time executive visibility for CFOs across CEEMEA and AP. Zero critical defects across 3 platform releases. IBM Q2 CIO Hero award.</p></div>
         </div>
-        <span class="case-outcome">↑ 40% efficiency gain in reporting</span>
+        <span class="case-outcome">↑ 40% efficiency gain · IBM CIO Hero 2022</span>
       </div>
     </div>
 
     <div class="case-card" onclick="toggleCase(this)">
       <div class="case-header">
-        <span class="case-num">02</span>
+        <span class="case-num">03</span>
         <div class="case-meta">
           <span class="case-company">TMF Group</span>
           <span class="case-title">Enterprise Client Onboarding Redesign</span>
         </div>
         <div style="display:flex;align-items:center;gap:16px;">
-          <div class="case-tags"><span class="tag">API Integration</span><span class="tag">UX Flows</span><span class="tag">Fintech</span></div>
+          <div class="case-tags"><span class="tag">API Integration</span><span class="tag">BPMN</span><span class="tag">Fintech</span></div>
           <svg class="case-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
       </div>
       <div class="case-body">
         <p>TMF Group's client portal served Fortune 500 accounts including HSBC, JP Morgan, Booking.com, and Worldpay. New client onboarding involved 14 manual handoff steps across compliance, legal, and operations — taking an average of 3 weeks from contract to live.</p>
         <div class="case-body-grid">
-          <div class="case-col"><p class="case-col-label">Problem</p><p>3-week onboarding SLA was a commercial liability. Duplicate document requests, no status visibility for clients, and manual compliance checks with no audit trail.</p></div>
-          <div class="case-col"><p class="case-col-label">What I did</p><p>Ran discovery workshops with compliance, legal, ops, and engineering. Redesigned the intake workflow end-to-end. Specified API integration between document portal and ERP. Produced BPMN maps and UAT scripts.</p></div>
-          <div class="case-col"><p class="case-col-label">Outcome</p><p>Onboarding time reduced from 3 weeks to 5 days. Full audit trail implemented. Stakeholder sign-off achieved across 4 teams on first review cycle.</p></div>
+          <div class="case-col"><p class="case-col-label">Problem</p><p>3-week onboarding SLA was a commercial liability. Duplicate document requests, no status visibility, and manual compliance checks with no audit trail.</p></div>
+          <div class="case-col"><p class="case-col-label">What I did</p><p>Ran discovery workshops across 4 business units. Redesigned intake workflow end-to-end. Specified API integration between document portal and ERP. Produced BPMN 2.0 maps and UAT scripts. Owned product backlog and sprint ceremonies for team of 8.</p></div>
+          <div class="case-col"><p class="case-col-label">Outcome</p><p>Onboarding time reduced from 3 weeks to 5 days. Full audit trail implemented. Stakeholder sign-off achieved across 4 teams in a single review cycle. Roadmap presented to Head of Product and regional CTO.</p></div>
         </div>
         <span class="case-outcome">↓ 76% reduction in onboarding time</span>
       </div>
@@ -419,7 +232,7 @@
 
     <div class="case-card" onclick="toggleCase(this)">
       <div class="case-header">
-        <span class="case-num">03</span>
+        <span class="case-num">04</span>
         <div class="case-meta">
           <span class="case-company">AT&T Global Network Services</span>
           <span class="case-title">Incident Triage Automation</span>
@@ -432,34 +245,11 @@
       <div class="case-body">
         <p>AT&T's EMEA network support team handled hundreds of incidents per week across enterprise clients. Analysts manually categorised and routed every ticket — a repetitive process that delayed first-response time and consumed analyst bandwidth.</p>
         <div class="case-body-grid">
-          <div class="case-col"><p class="case-col-label">Problem</p><p>Manual ticket categorisation took ~6 hours/week across the team. Mis-routing to wrong teams added 2–4 hour delays to resolution. SLA pressure on the team was high.</p></div>
-          <div class="case-col"><p class="case-col-label">What I did</p><p>Analysed 6 months of incident data to identify recurring categories. Proposed and documented scripted routing rules. Worked with tooling team to implement automated categorisation workflows.</p></div>
-          <div class="case-col"><p class="case-col-label">Outcome</p><p>~6 hours/week of manual triage eliminated. Mis-routing rate dropped significantly. Contributed to 99.7% SLA compliance. Earned AT&T 100% Club Award for client satisfaction.</p></div>
+          <div class="case-col"><p class="case-col-label">Problem</p><p>Manual ticket categorisation took ~6 hours/week across the team. Mis-routing added 2–4 hour delays to resolution. SLA pressure was high.</p></div>
+          <div class="case-col"><p class="case-col-label">What I did</p><p>Analysed 6 months of incident data to identify recurring categories. Proposed and documented scripted CRM routing rules. Worked with tooling team to implement automated categorisation workflows.</p></div>
+          <div class="case-col"><p class="case-col-label">Outcome</p><p>~6 hours/week of manual triage eliminated. Contributed to 99.7% SLA compliance. Earned AT&T 100% Club Award (top 5%) two consecutive quarters.</p></div>
         </div>
         <span class="case-outcome">↓ 6hrs/week manual triage eliminated</span>
-      </div>
-    </div>
-
-    <div class="case-card" onclick="toggleCase(this)">
-      <div class="case-header">
-        <span class="case-num">04</span>
-        <div class="case-meta">
-          <span class="case-company">Moody's Analytics</span>
-          <span class="case-title">Credit Risk Platform Client Onboarding</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div class="case-tags"><span class="tag">Implementation</span><span class="tag">Credit Risk</span><span class="tag">API</span></div>
-          <svg class="case-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <div class="case-body">
-        <p>At Moody's Analytics I work at the intersection of product, implementation and client success — ensuring enterprise clients are successfully onboarded to credit analytics and risk platforms, and that post-go-live issues are resolved with minimal disruption.</p>
-        <div class="case-body-grid">
-          <div class="case-col"><p class="case-col-label">Focus Areas</p><p>Client ERP-to-API integration design, functional specification authoring, test plan development, and post-go-live hypercare for enterprise accounts.</p></div>
-          <div class="case-col"><p class="case-col-label">Approach</p><p>Working in scaled Agile environment. Primary technical contact for clients post-launch. Collaborating with product and engineering squads to feed client pain points back into roadmap.</p></div>
-          <div class="case-col"><p class="case-col-label">Early Wins</p><p>Maintaining sub-48hr issue resolution SLA. Building internal documentation and onboarding playbooks to standardise the implementation process across the team.</p></div>
-        </div>
-        <span class="case-outcome">⟳ In progress · Dec 2024 – Present</span>
       </div>
     </div>
 
@@ -486,7 +276,7 @@
           <rect x="220" y="62" width="50" height="20" rx="3" fill="white" stroke="#1A4FBF" stroke-width="1"/>
           <text x="245" y="75" text-anchor="middle" font-size="7" fill="#1A4FBF" font-family="monospace">Process</text>
           <circle cx="280" cy="72" r="8" fill="#1A4FBF" stroke="#1A4FBF" stroke-width="2"/>
-          <text x="80" y="50" text-anchor="middle" font-size="8" fill="#6B7280" font-family="monospace">Client Onboarding Flow</text>
+          <text x="150" y="50" text-anchor="middle" font-size="8" fill="#6B7280" font-family="monospace">Client Onboarding Flow</text>
           <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1A4FBF"/></marker></defs>
         </svg>
       </div>
@@ -500,20 +290,20 @@
     <div class="sample-card">
       <div class="sample-preview api">
         <div class="api-mock">
-<span class="dim">// GET /api/v1/client/{id}/onboarding</span><br/>
+<span class="dim">// GET /api/v1/entity/{id}/verify</span><br/>
 <span class="dim">{</span><br/>
-&nbsp;&nbsp;<span class="key">"status"</span>: <span class="str">"active"</span>,<br/>
-&nbsp;&nbsp;<span class="key">"client_id"</span>: <span class="str">"ENT-00421"</span>,<br/>
-&nbsp;&nbsp;<span class="key">"stage"</span>: <span class="str">"compliance_review"</span>,<br/>
-&nbsp;&nbsp;<span class="key">"completion"</span>: <span class="num">68</span>,<br/>
-&nbsp;&nbsp;<span class="key">"sla_days_remaining"</span>: <span class="num">2</span><br/>
+&nbsp;&nbsp;<span class="key">"product"</span>: <span class="str">"EVA"</span>,<br/>
+&nbsp;&nbsp;<span class="key">"entity_id"</span>: <span class="str">"ENT-00421"</span>,<br/>
+&nbsp;&nbsp;<span class="key">"kyc_status"</span>: <span class="str">"verified"</span>,<br/>
+&nbsp;&nbsp;<span class="key">"sanctions_hit"</span>: <span class="num">false</span>,<br/>
+&nbsp;&nbsp;<span class="key">"confidence_score"</span>: <span class="num">0.97</span><br/>
 <span class="dim">}</span>
         </div>
       </div>
       <div class="sample-info">
         <p class="sample-type">API Documentation</p>
         <p class="sample-title">REST API Specs & Integration Guides</p>
-        <p class="sample-desc">Functional specs, endpoint documentation, authentication flows, and sandbox onboarding guides for enterprise clients.</p>
+        <p class="sample-desc">Postman library of 50+ use cases covering EVA, MaxSight, Sanctions 360, Orbis, and KYC API — adopted as team standard.</p>
       </div>
     </div>
 
@@ -521,18 +311,12 @@
       <div class="sample-preview pbi">
         <svg class="pbi-bars" viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
           <text x="150" y="18" text-anchor="middle" font-size="9" fill="#6B7280" font-family="monospace">Invoicing Platform — Weekly Overview</text>
-          <rect x="20" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/>
-          <rect x="20" y="55" width="34" height="55" rx="2" fill="#1A4FBF"/>
-          <rect x="65" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/>
-          <rect x="65" y="45" width="34" height="65" rx="2" fill="#1A4FBF"/>
-          <rect x="110" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/>
-          <rect x="110" y="40" width="34" height="70" rx="2" fill="#1A4FBF"/>
-          <rect x="155" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/>
-          <rect x="155" y="60" width="34" height="50" rx="2" fill="#1A4FBF"/>
-          <rect x="200" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/>
-          <rect x="200" y="35" width="34" height="75" rx="2" fill="#1A4FBF"/>
-          <rect x="245" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/>
-          <rect x="245" y="48" width="34" height="62" rx="2" fill="#1A4FBF"/>
+          <rect x="20" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="20" y="55" width="34" height="55" rx="2" fill="#1A4FBF"/>
+          <rect x="65" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="65" y="45" width="34" height="65" rx="2" fill="#1A4FBF"/>
+          <rect x="110" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="110" y="40" width="34" height="70" rx="2" fill="#1A4FBF"/>
+          <rect x="155" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="155" y="60" width="34" height="50" rx="2" fill="#1A4FBF"/>
+          <rect x="200" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="200" y="35" width="34" height="75" rx="2" fill="#1A4FBF"/>
+          <rect x="245" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="245" y="48" width="34" height="62" rx="2" fill="#1A4FBF"/>
           <line x1="10" y1="110" x2="290" y2="110" stroke="#D1D5DB" stroke-width="0.5"/>
           <text x="37" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W1</text>
           <text x="82" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W2</text>
@@ -545,7 +329,7 @@
       <div class="sample-info">
         <p class="sample-type">Data Visualisation</p>
         <p class="sample-title">Power BI Management Dashboards</p>
-        <p class="sample-desc">Automated executive dashboards replacing manual reporting — pulling from IBM DB2 and reducing reporting effort by ~40%.</p>
+        <p class="sample-desc">Automated executive dashboards pulling from IBM DB2 — reducing manual reporting effort by ~40% for CFOs across CEEMEA and AP regions.</p>
       </div>
     </div>
 
@@ -558,13 +342,13 @@
 <span class="green">+</span> onboarding-checklist-gen.py<br/>
 <span class="green">+</span> db2-reconciliation-query.sql<br/>
 <span class="green">+</span> bpmn-template-library/<br/>
-<span class="grey">main · 4 contributors · MIT</span>
+<span class="grey">main · MIT license</span>
         </div>
       </div>
       <div class="sample-info">
         <p class="sample-type">GitHub</p>
         <p class="sample-title">Implementation Tooling & Scripts</p>
-        <p class="sample-desc">Python utilities, SQL queries, and reusable templates from implementation and BA work. Updated actively at Moody's.</p>
+        <p class="sample-desc">Python utilities, SQL queries, and reusable templates from implementation and BA work at Moody's.</p>
       </div>
     </div>
 
@@ -586,7 +370,7 @@
       <div class="sample-info">
         <p class="sample-type">Documentation</p>
         <p class="sample-title">Functional Specs & User Stories</p>
-        <p class="sample-desc">Detailed BRDs, functional specifications, acceptance criteria, and user story libraries from IBM and TMF engagements.</p>
+        <p class="sample-desc">BRDs, functional specifications, acceptance criteria, and user story libraries from IBM and TMF engagements.</p>
       </div>
     </div>
 
@@ -613,18 +397,18 @@
       <div class="sample-info">
         <p class="sample-type">AI / Analytics</p>
         <p class="sample-title">IBM Watson Analytics Challenge</p>
-        <p class="sample-desc">Developed AI/ML-powered analytics prototype — ranked in top presentations company-wide at IBM's internal innovation challenge.</p>
+        <p class="sample-desc">AI/ML-powered analytics prototype — ranked in top presentations company-wide at IBM's internal innovation challenge.</p>
       </div>
     </div>
 
   </div>
 </section>
 
-<section id="contact" style="background: var(--ink);">
+<section id="contact" style="background:var(--ink);">
   <div class="contact-inner">
     <div class="contact-left reveal">
       <h2 style="color:white;">Let's build<br/><em style="font-family:var(--serif);font-style:italic;color:#93C5FD;">something.</em></h2>
-      <p style="color:#9CA3AF;">Open to Senior PM, Product Owner, and Senior BA roles — ideally in fintech, enterprise SaaS, or financial services. Based in Madrid. EU long-term resident card holder.</p>
+      <p style="color:#9CA3AF;">Open to Senior BA, API Integration Specialist, and Implementation Engineer roles — ideally in fintech, regtech, credit risk, or enterprise SaaS. Based in Madrid. EU long-term resident card holder.</p>
     </div>
     <div class="contact-links reveal">
       <a class="contact-link" href="mailto:nithyich@gmail.com" style="background:#161616;border-color:#2A2A2A;">
@@ -674,7 +458,6 @@
       }
     });
   }, { threshold: 0.1 });
-
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
   function toggleCase(card) {
@@ -684,10 +467,7 @@
       c.classList.remove('open');
       c.querySelector('.case-body').classList.remove('open');
     });
-    if (!isOpen) {
-      card.classList.add('open');
-      body.classList.add('open');
-    }
+    if (!isOpen) { card.classList.add('open'); body.classList.add('open'); }
   }
 </script>
 </body>
