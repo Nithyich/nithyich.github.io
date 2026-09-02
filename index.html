@@ -1,474 +1,799 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nithiesh Thennarasu — API Integration & Business Analysis Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --ink:#0D0D0D; --ink-2:#3A3A3A; --ink-3:#7A7A7A;
-    --paper:#F9F7F4; --paper-2:#F0EDE8; --accent:#1A4FBF;
-    --accent-2:#E8F0FF; --rule:#D8D3CC;
-    --serif:'DM Serif Display',Georgia,serif;
-    --sans:'DM Sans',sans-serif; --mono:'DM Mono',monospace;
-    --ease:cubic-bezier(0.16,1,0.3,1);
-  }
-  html{scroll-behavior:smooth;}
-  body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(249,247,244,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
-  .nav-logo{font-family:var(--serif);font-size:18px;color:var(--ink);text-decoration:none;letter-spacing:-0.3px;}
-  .nav-links{display:flex;gap:32px;list-style:none;}
-  .nav-links a{font-size:13px;font-weight:500;color:var(--ink-3);text-decoration:none;letter-spacing:0.04em;text-transform:uppercase;transition:color 0.2s;}
-  .nav-links a:hover{color:var(--accent);}
-  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 72px;border-bottom:1px solid var(--rule);position:relative;overflow:hidden;}
-  .hero-eyebrow{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp 0.8s var(--ease) 0.2s forwards;}
-  .hero-name{font-family:var(--serif);font-size:clamp(52px,8vw,96px);line-height:0.95;letter-spacing:-2px;color:var(--ink);margin-bottom:28px;opacity:0;animation:fadeUp 0.9s var(--ease) 0.35s forwards;}
-  .hero-name em{color:var(--accent);font-style:italic;}
-  .hero-desc{max-width:560px;font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;opacity:0;animation:fadeUp 0.9s var(--ease) 0.5s forwards;}
-  .hero-meta{display:flex;gap:40px;margin-top:48px;opacity:0;animation:fadeUp 0.9s var(--ease) 0.65s forwards;}
-  .hero-stat{display:flex;flex-direction:column;gap:4px;}
-  .hero-stat-num{font-family:var(--serif);font-size:32px;color:var(--ink);letter-spacing:-1px;}
-  .hero-stat-label{font-size:11px;font-weight:500;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.08em;}
-  .hero-scroll{position:absolute;bottom:32px;right:48px;font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:0.08em;writing-mode:vertical-rl;opacity:0;animation:fadeIn 1s var(--ease) 1.2s forwards;}
-  .hero-bg-text{position:absolute;top:50%;right:-20px;transform:translateY(-50%);font-family:var(--serif);font-size:clamp(160px,22vw,280px);color:var(--paper-2);line-height:1;pointer-events:none;user-select:none;white-space:nowrap;z-index:0;}
-  .hero>*:not(.hero-bg-text){position:relative;z-index:1;}
-  section{padding:96px 48px;border-bottom:1px solid var(--rule);}
-  .section-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;display:block;}
-  .section-title{font-family:var(--serif);font-size:clamp(32px,4vw,48px);line-height:1.1;letter-spacing:-1px;color:var(--ink);margin-bottom:48px;}
-  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
-  .about-text p{color:var(--ink-2);font-weight:300;font-size:15.5px;line-height:1.8;margin-bottom:16px;}
-  .about-skills{display:flex;flex-direction:column;gap:0;}
-  .skill-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--rule);}
-  .skill-row:first-child{border-top:1px solid var(--rule);}
-  .skill-name{font-size:13px;font-weight:500;color:var(--ink);}
-  .skill-bar{width:120px;height:2px;background:var(--rule);border-radius:1px;position:relative;overflow:hidden;}
-  .skill-fill{position:absolute;left:0;top:0;height:100%;background:var(--accent);border-radius:1px;transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease);}
-  .skill-row.visible .skill-fill{transform:scaleX(1);}
-  .cases{display:flex;flex-direction:column;gap:2px;}
-  .case-card{background:var(--paper);border:1px solid var(--rule);border-radius:4px;overflow:hidden;transition:border-color 0.25s,box-shadow 0.25s;cursor:pointer;}
-  .case-card:hover{border-color:var(--accent);box-shadow:0 8px 40px rgba(26,79,191,0.08);}
-  .case-header{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:24px;padding:28px 32px;}
-  .case-num{font-family:var(--serif);font-size:36px;color:var(--paper-2);line-height:1;font-style:italic;}
-  .case-meta{display:flex;flex-direction:column;gap:4px;}
-  .case-company{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;}
-  .case-title{font-family:var(--serif);font-size:22px;color:var(--ink);letter-spacing:-0.4px;}
-  .case-tags{display:flex;gap:8px;flex-wrap:wrap;}
-  .tag{font-size:11px;font-weight:500;padding:4px 10px;border:1px solid var(--rule);border-radius:2px;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.06em;background:var(--paper-2);}
-  .case-body{display:none;padding:0 32px 28px 120px;color:var(--ink-2);font-weight:300;line-height:1.8;font-size:14.5px;}
-  .case-body.open{display:block;}
-  .case-body-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:20px;}
-  .case-col-label{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
-  .case-col p{font-size:13.5px;color:var(--ink-2);line-height:1.7;}
-  .case-chevron{width:24px;height:24px;color:var(--ink-3);transition:transform 0.3s var(--ease);flex-shrink:0;}
-  .case-card.open .case-chevron{transform:rotate(180deg);}
-  .case-outcome{display:inline-flex;align-items:center;gap:6px;background:var(--accent-2);color:var(--accent);font-size:12px;font-weight:600;padding:6px 12px;border-radius:2px;margin-top:16px;}
-  .samples-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .sample-card{border:1px solid var(--rule);border-radius:4px;overflow:hidden;transition:transform 0.3s var(--ease),box-shadow 0.3s;}
-  .sample-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.08);}
-  .sample-preview{height:180px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-  .sample-preview.bpmn{background:#EEF4FF;}
-  .sample-preview.api{background:#0D0D0D;}
-  .sample-preview.pbi{background:#F3F0EB;}
-  .sample-preview.gh{background:#0D1117;}
-  .sample-info{padding:20px 24px;}
-  .sample-type{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;}
-  .sample-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px;}
-  .sample-desc{font-size:13px;color:var(--ink-3);line-height:1.6;}
-  .bpmn-svg{width:100%;padding:16px;}
-  .api-mock{font-family:var(--mono);font-size:10px;color:#7EE787;text-align:left;padding:16px;line-height:1.7;width:100%;}
-  .api-mock .dim{color:#484F58;} .api-mock .key{color:#79C0FF;} .api-mock .str{color:#A5D6FF;} .api-mock .num{color:#F2CC60;}
-  .pbi-bars{width:100%;padding:20px;}
-  .gh-preview{font-family:var(--mono);font-size:10px;color:#C9D1D9;text-align:left;padding:16px;line-height:1.7;width:100%;}
-  .gh-preview .green{color:#3FB950;} .gh-preview .blue{color:#58A6FF;} .gh-preview .grey{color:#484F58;}
-  .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
-  .contact-left h2{font-family:var(--serif);font-size:clamp(36px,5vw,56px);line-height:1.05;letter-spacing:-1.5px;color:var(--ink);margin-bottom:20px;}
-  .contact-left p{font-size:15px;color:var(--ink-2);font-weight:300;line-height:1.8;}
-  .contact-links{display:flex;flex-direction:column;gap:16px;}
-  .contact-link{display:flex;align-items:center;gap:16px;padding:20px 24px;border:1px solid var(--rule);border-radius:4px;text-decoration:none;color:var(--ink);transition:border-color 0.2s,background 0.2s;}
-  .contact-link:hover{border-color:var(--accent);background:var(--accent-2);}
-  .contact-link-icon{width:36px;height:36px;background:var(--paper-2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .contact-link-text{display:flex;flex-direction:column;gap:2px;}
-  .contact-link-label{font-size:11px;font-weight:500;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.08em;}
-  .contact-link-value{font-size:14px;font-weight:500;color:var(--ink);}
-  footer{padding:32px 48px;display:flex;align-items:center;justify-content:space-between;}
-  footer p{font-size:12px;color:var(--ink-3);}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.8s var(--ease),transform 0.8s var(--ease);}
-  .reveal.visible{opacity:1;transform:translateY(0);}
-  @media(max-width:768px){
-    nav{padding:16px 24px;} .nav-links{display:none;}
-    .hero,section{padding-left:24px;padding-right:24px;}
-    .about-grid,.contact-inner{grid-template-columns:1fr;gap:40px;}
-    .samples-grid{grid-template-columns:1fr;}
-    .case-body{padding-left:32px;} .case-body-grid{grid-template-columns:1fr;}
-    .hero-bg-text{font-size:120px;right:-40px;}
-  }
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Nithiesh Thennarasu — API Integration &amp; Implementation Engineering</title>
+<meta name="description" content="Nithiesh Thennarasu — API integration specialist, senior business analyst and implementation engineer. Six years across fintech, credit risk and global financial platforms: Moody's, IBM, TMF Group, AT&amp;T. Based in Bratislava, Slovakia.">
+<meta name="theme-color" content="#ffffff">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nithiesh Thennarasu — API Integration &amp; Implementation Engineering">
+<meta property="og:description" content="I integrate financial data APIs into enterprise systems, and put the governance around them that keeps them running. Moody's · IBM · TMF Group · AT&amp;T.">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="#">Nithiesh T.</a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#cases">Case Studies</a></li>
-    <li><a href="#samples">Work Samples</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<section class="hero">
-  <div class="hero-bg-text">API</div>
-  <p class="hero-eyebrow">API Integration Specialist · Senior Business Analyst · Implementation Engineer</p>
-  <h1 class="hero-name">Nithiesh<br/><em>Thennarasu</em></h1>
-  <p class="hero-desc">I integrate complex financial data APIs into enterprise systems and turn ambiguous business problems into shipped solutions. 6+ years across fintech, credit risk, and global financial platforms — from Moody's API suite to IBM mainframes serving 140 countries.</p>
-  <div class="hero-meta">
-    <div class="hero-stat"><span class="hero-stat-num">6+</span><span class="hero-stat-label">Years Experience</span></div>
-    <div class="hero-stat"><span class="hero-stat-num">10+</span><span class="hero-stat-label">API Products Integrated</span></div>
-    <div class="hero-stat"><span class="hero-stat-num">~40%</span><span class="hero-stat-label">Reporting Efficiency Gain</span></div>
-    <div class="hero-stat"><span class="hero-stat-num">140+</span><span class="hero-stat-label">Countries Impacted</span></div>
+<header class="site-header" id="top">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">NT</span>
+      <span class="brand-name">Nithiesh&nbsp;Thennarasu</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
+      <span class="nav-toggle-bar" aria-hidden="true"></span>
+      <span class="nav-toggle-bar" aria-hidden="true"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#cases">Case studies</a>
+      <a href="#work">Work</a>
+      <a href="#approach">Approach</a>
+      <a href="#contact">Contact</a>
+      <a class="nav-cta" href="https://github.com/nithyich" rel="noopener">GitHub</a>
+    </nav>
   </div>
-  <span class="hero-scroll">Scroll to explore ↓</span>
-</section>
+</header>
 
-<section id="about">
-  <span class="section-label reveal">01 — About</span>
-  <h2 class="section-title reveal">API-first thinking,<br/>engineering roots.</h2>
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <p>I started as an electrical engineer, moved into network infrastructure, then discovered that the most interesting problems weren't technical — they were about connecting the right systems, for the right clients, in the right way. That's what drew me to API integration and business analysis.</p>
-      <p>At Moody's Analytics I lead end-to-end integration of the full API suite — EVA, MaxSight, Sanctions 360, Orbis, and KYC API — into enterprise client systems across banking and financial services. At IBM I owned a global invoicing platform used in 140+ countries, eliminating ~40% of manual reporting through Power BI automation.</p>
-      <p>My edge: I can diagnose a failing API endpoint, write a SQL reconciliation query, map a BPMN process flow, and present findings to a CFO — all in the same week. I speak engineer and I speak stakeholder.</p>
+<main id="main">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">API Integration Specialist · Senior Business Analyst · Implementation Engineer</p>
+      <h1 class="hero-title">Nithiesh Thennarasu</h1>
+
+      <p class="hero-tagline">
+        I make financial&nbsp;data APIs <span class="accent">land in production</span> —
+        and keep them governed after.
+      </p>
+
+      <p class="hero-subtitle">
+        Business Governance &amp; Delivery — Enterprise Platforms, Commercial Operations &amp; Risk
+        <span class="hero-loc">Bratislava, Slovakia · EU Long-Term Resident</span>
+      </p>
+
+      <p class="hero-lede">
+        Six years turning vague business problems into delivered systems across fintech, credit risk
+        and global financial platforms — from Moody's API products to IBM mainframes serving 140
+        countries. I work at the seam between a data product and the enterprise trying to integrate
+        it: mapping client schemas onto entity data, clarifying requirements until they are testable,
+        and putting the governance around a delivery that keeps it running once it is someone else's
+        to own.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#cases">See case studies</a>
+        <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      </div>
+
+      <dl class="stat-row">
+        <div class="stat"><dt>Years experience</dt><dd>6+</dd></div>
+        <div class="stat"><dt>API products integrated</dt><dd>10+</dd></div>
+        <div class="stat"><dt>Reporting efficiency gain</dt><dd>~40%</dd></div>
+        <div class="stat"><dt>Countries impacted</dt><dd>140+</dd></div>
+      </dl>
     </div>
-    <div class="about-skills reveal">
-      <div class="skill-row"><span class="skill-name">REST API Integration</span><div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div></div>
-      <div class="skill-row"><span class="skill-name">Requirements & User Stories</span><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
-      <div class="skill-row"><span class="skill-name">Stakeholder Management</span><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
-      <div class="skill-row"><span class="skill-name">Data & Power BI</span><div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div></div>
-      <div class="skill-row"><span class="skill-name">Agile / Scrum</span><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-      <div class="skill-row"><span class="skill-name">Process Design (BPMN)</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
-      <div class="skill-row"><span class="skill-name">SQL & Data Analysis</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
+  </section>
+
+  <!-- ============================ ABOUT ============================ -->
+  <section class="section" id="about" aria-labelledby="about-title">
+    <div class="wrap">
+      <p class="eyebrow">01 — About</p>
+      <h2 class="section-title" id="about-title">API-first thinking, engineering roots</h2>
+
+      <div class="about-grid">
+        <div class="about-copy">
+          <p>
+            I started as an electrical engineer and moved into network infrastructure. What kept
+            pulling my attention wasn't the hardware — it was that the genuinely interesting problems
+            were about connecting the right systems to the right clients. That took me into API
+            integration and business analysis, and I have stayed there since.
+          </p>
+          <p>
+            At Moody's Analytics I lead full-suite API integration — EVA, MaxSight, Sanctions 360,
+            Orbis and the KYC API — into banking, insurance and other compliance-heavy environments,
+            and coordinate the onboarding workstreams and governance reviews that surround it. At IBM
+            I owned a global invoicing platform spanning 140+ countries and removed roughly 40% of the
+            manual reporting effort through Power BI automation.
+          </p>
+          <p>
+            The differentiator is range. In a single week I can debug an API endpoint, write the SQL
+            reconciliation behind it, map the process in BPMN, and brief a CFO on what it means.
+            <strong>I speak engineer and I speak stakeholder</strong> — and most delivery problems
+            live in the gap between those two languages.
+          </p>
+        </div>
+
+        <aside class="about-side" aria-label="Core skills and recognition">
+          <h3>Core skills</h3>
+          <ul class="tags">
+            <li>REST API Integration</li>
+            <li>Requirements &amp; User Stories</li>
+            <li>Stakeholder Management</li>
+            <li>Data &amp; Power BI</li>
+            <li>Agile / Scrum</li>
+            <li>Process Design (BPMN)</li>
+            <li>SQL &amp; Data Analysis</li>
+            <li>Governance &amp; Risk</li>
+          </ul>
+
+          <h3 class="about-side-second">Recognition</h3>
+          <ul class="awards">
+            <li><strong>IBM Q2 CIO Hero</strong> — global invoicing platform transformation, 2022</li>
+            <li><strong>AT&amp;T 100% Club</strong> — top 5%, two consecutive quarters</li>
+            <li><strong>IBM Watson Analytics Challenge</strong> — top presentations company-wide</li>
+          </ul>
+        </aside>
+      </div>
     </div>
+  </section>
+
+  <!-- ============================ CAPABILITIES ============================ -->
+  <section class="section section-alt" id="capabilities" aria-labelledby="capabilities-title">
+    <div class="wrap">
+      <p class="eyebrow">What I do</p>
+      <h2 class="section-title" id="capabilities-title">Delivery, end to end</h2>
+      <p class="section-lede">
+        Two halves of the same job: getting the integration technically right, and putting the
+        governance around it that keeps it right once it's someone else's to run.
+      </p>
+
+      <div class="grid grid-3">
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5.5" rx="7.5" ry="3"></ellipse>
+              <path d="M4.5 5.5v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6"></path>
+              <path d="M4.5 11.5v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6"></path>
+            </svg>
+          </div>
+          <h3>Data mapping &amp; schema translation</h3>
+          <p>
+            Taking a customer's field list — often ambiguous, often mislabelled — and resolving each one
+            to the authoritative concept in the target data model, with an explicit confidence score and
+            an honest no-match where the data genuinely isn't there.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18l-6-6 6-6"></path>
+              <path d="M15 6l6 6-6 6"></path>
+            </svg>
+          </div>
+          <h3>API enablement &amp; documentation</h3>
+          <p>
+            Reference collections that mirror the operational journey rather than the endpoint list, so a
+            migrating team can map its existing process onto new concepts instead of reverse-engineering
+            them from a spec.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <path d="M3 9h18"></path>
+              <path d="M8 14l2 2 4-4"></path>
+            </svg>
+          </div>
+          <h3>Internal tooling</h3>
+          <p>
+            When the same manual work happens for the third time, I build the tool. React front-ends that
+            encode the methodology, keep the schema as the source of truth, and export something a customer
+            can actually act on.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l7.5 3v5.2c0 4.2-3.1 7.6-7.5 8.8-4.4-1.2-7.5-4.6-7.5-8.8V6z"></path>
+              <path d="M9.2 12.1l2 2 3.6-3.8"></path>
+            </svg>
+          </div>
+          <h3>Governance &amp; controls</h3>
+          <p>
+            Turning a delivery into something auditable: clear ownership, decision records, defined
+            escalation paths, and controls proportionate to the actual risk rather than ceremony for
+            its own sake. If nobody can say who decided what and when, the platform isn't governed —
+            it's just running.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v16.5a1.5 1.5 0 0 0 1.5 1.5H21"></path>
+              <path d="M7 15l3.5-4 3 2.6L20 7"></path>
+            </svg>
+          </div>
+          <h3>Commercial operations</h3>
+          <p>
+            The operational layer between what was sold and what gets delivered — scope and consumption
+            against what was contracted, and reporting that lets commercial, delivery and risk teams
+            argue from the same numbers instead of two spreadsheets.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.3 3.9L2.5 17.4A1.7 1.7 0 0 0 4 20h16a1.7 1.7 0 0 0 1.5-2.6L13.7 3.9a1.9 1.9 0 0 0-3.4 0z"></path>
+              <path d="M12 9.5v4"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+          </div>
+          <h3>Risk &amp; assurance</h3>
+          <p>
+            Identifying where a delivery is actually exposed — data quality, regulatory fitness,
+            key-person dependency, third-party reliance — and tracking it somewhere visible with an
+            owner and a date, rather than in the memory of whoever noticed first.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CASE STUDIES ============================ -->
+  <section class="section" id="cases" aria-labelledby="cases-title">
+    <div class="wrap">
+      <p class="eyebrow">02 — Case studies</p>
+      <h2 class="section-title" id="cases-title">Problems, actions, outcomes</h2>
+      <p class="section-lede">
+        Five deliveries across financial data, enterprise platforms and network operations. Each one
+        states the problem as it actually arrived, what I did about it, and what changed as a result.
+      </p>
+
+      <div class="cases">
+
+        <!-- 01 -->
+        <article class="case">
+          <div class="case-head">
+            <span class="case-num" aria-hidden="true">01</span>
+            <div class="case-title">
+              <h3>Enterprise API Integration — Full Product Suite</h3>
+              <p class="case-org">Moody's Analytics</p>
+            </div>
+          </div>
+          <ul class="tags"><li>REST API</li><li>KYC / AML</li><li>Fintech</li></ul>
+
+          <p class="case-overview">
+            End-to-end integration of the complete product suite — Entity Verification API (EVA),
+            MaxSight, Sanctions 360, Orbis and the KYC API — into enterprise client systems across
+            banking, insurance and compliance-heavy industries. Every engagement means working through
+            regulatory constraints, a different client tech stack, and a compressed go-live date.
+          </p>
+
+          <div class="case-body">
+            <div class="case-block">
+              <h4>Problem</h4>
+              <ul>
+                <li>Clients could not self-serve the integration successfully.</li>
+                <li>The same blockers recurred: authentication failures, schema mismatches, gaps in the documented use cases.</li>
+                <li>No standardised onboarding path existed — timelines stretched and the same questions cycled between teams.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>What I did</h4>
+              <ul>
+                <li>Built a Postman collection of <strong>50+ use cases</strong> spanning every product in the suite.</li>
+                <li>Rebuilt the intake and verification workflows from start to finish.</li>
+                <li>Guided clients through OAuth 2.0, rate limiting, retry logic and error handling.</li>
+                <li>Ran structured root cause analysis on broken endpoints across the auth, schema and network layers.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>Outcome</h4>
+              <ul>
+                <li>Onboarding compressed from <strong>three weeks to five days</strong>.</li>
+                <li>P1 incidents closed inside 48 hours.</li>
+                <li>The Postman library became the team's standard reference.</li>
+                <li>Three API enhancement requests taken into the product roadmap, sourced from repeated client pain points.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="case-metric">↓ 76% reduction in onboarding time · 48hr P1 resolution</p>
+        </article>
+
+        <!-- 02 -->
+        <article class="case">
+          <div class="case-head">
+            <span class="case-num" aria-hidden="true">02</span>
+            <div class="case-title">
+              <h3>Client Onboarding Workstreams &amp; Governance Delivery</h3>
+              <p class="case-org">Moody's Analytics</p>
+            </div>
+          </div>
+          <ul class="tags"><li>Scaled agile</li><li>ERP integration</li><li>Governance</li><li>Risk</li></ul>
+
+          <p class="case-overview">
+            Coordinating enterprise client onboarding workstreams for credit analytics and risk
+            platforms, including the integration workflows connecting client ERP systems to Moody's
+            data APIs — and running the governance review cycle that surrounds those deliveries.
+          </p>
+
+          <div class="case-body">
+            <div class="case-block">
+              <h4>Problem</h4>
+              <ul>
+                <li>Onboarding delay rarely traces to the technology. It traces to a requirement everyone agreed with and nobody defined precisely enough to verify.</li>
+                <li>Client, product, engineering and data teams each describe the same delivery in a different vocabulary.</li>
+                <li>Governance reviews only produce good decisions if the right commercial, technical and risk information reaches the room in time to be challenged.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>What I did</h4>
+              <ul>
+                <li>Developed <strong>functional specifications and test plans</strong> for new platform modules in a scaled agile delivery environment.</li>
+                <li>Managed <strong>integration dependencies</strong> across client ERP systems and Moody's data APIs, surfacing blockers while there was still time to sequence around them.</li>
+                <li>Drove requirement clarification to the point of being <strong>testable</strong>, and owned <strong>test readiness</strong> — environments, data and acceptance criteria confirmed before a cycle opens.</li>
+                <li>Facilitated governance reviews — keeping discussion constructive and outcomes explicit — and independently led sessions when required.</li>
+                <li>Maintained governance documentation, records and forward visibility of upcoming reviews, with minutes capturing discussion, decisions, actions and accountability.</li>
+                <li>Advised submitting teams on best practice to raise submission quality, and partnered across teams to prioritise reviews against customer timelines and business objectives.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>Outcome</h4>
+              <ul>
+                <li>Commercial, technical, operational and risk information is presented <em>and challenged</em> at review, so decisions are made on a complete picture and taken while still useful.</li>
+                <li>A paper that answers the obvious challenges in advance converts a deferral into a decision — submission quality is now coached, not corrected.</li>
+                <li>Continuous simplification of governance processes, tools and ways of working: steps that no longer earn their place get removed, improving speed and consistency.</li>
+                <li>Decisions and actions carry a named owner and a date, so the same question isn't reopened three meetings later.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- 03 -->
+        <article class="case">
+          <div class="case-head">
+            <span class="case-num" aria-hidden="true">03</span>
+            <div class="case-title">
+              <h3>Global Invoicing Platform Transformation</h3>
+              <p class="case-org">IBM — International Services Centre</p>
+            </div>
+          </div>
+          <ul class="tags"><li>Process design</li><li>Power BI</li><li>Mainframe</li></ul>
+
+          <p class="case-overview">
+            The platform handled billing for commercial operations in <strong>140+ countries</strong>.
+            Weekly reporting required analysts to hand-assemble data from several mainframe sources —
+            slow, error-prone, and giving leadership no visibility until something broke.
+          </p>
+
+          <div class="case-body">
+            <div class="case-block">
+              <h4>Problem</h4>
+              <ul>
+                <li>Manual reconciliation spanned <strong>8 downstream systems</strong> at 10+ hours per week per analyst.</li>
+                <li>No real-time reporting existed anywhere in the flow.</li>
+                <li>Diagnosing post-deployment issues stretched into days.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>What I did</h4>
+              <ul>
+                <li>Documented all end-to-end data flows in BPMN.</li>
+                <li>Built automated Power BI dashboards sourced from IBM DB2.</li>
+                <li>Led UAT alongside disaster recovery test planning.</li>
+                <li>Managed the backlog and delivered three major releases.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>Outcome</h4>
+              <ul>
+                <li>Roughly <strong>40% less manual reporting effort</strong>.</li>
+                <li>Live executive visibility for CFOs across the CEEMEA and AP regions.</li>
+                <li>Zero critical defects across three platform releases.</li>
+                <li>Recognised with the IBM Q2 CIO Hero award.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="case-metric">↑ 40% efficiency gain · IBM CIO Hero 2022</p>
+        </article>
+
+        <!-- 04 -->
+        <article class="case">
+          <div class="case-head">
+            <span class="case-num" aria-hidden="true">04</span>
+            <div class="case-title">
+              <h3>Enterprise Client Onboarding Redesign</h3>
+              <p class="case-org">TMF Group</p>
+            </div>
+          </div>
+          <ul class="tags"><li>API integration</li><li>BPMN</li><li>Fintech</li></ul>
+
+          <p class="case-overview">
+            The client portal supported Fortune 500 accounts including HSBC, JP Morgan, Booking.com and
+            Worldpay. Onboarding a new client took <strong>14 manual handoffs</strong> across compliance,
+            legal and operations, averaging three weeks from signed contract to live account.
+          </p>
+
+          <div class="case-body">
+            <div class="case-block">
+              <h4>Problem</h4>
+              <ul>
+                <li>The three-week turnaround had become a commercial liability.</li>
+                <li>Documents were requested from clients more than once.</li>
+                <li>Clients had no way to check status, and compliance checks ran manually with no audit trail.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>What I did</h4>
+              <ul>
+                <li>Facilitated discovery workshops across four business units.</li>
+                <li>Redesigned the intake workflow end to end.</li>
+                <li>Wrote the specification for the API integration linking the document portal to the ERP.</li>
+                <li>Produced BPMN 2.0 process maps and UAT scripts.</li>
+                <li>Owned the product backlog and ran sprint ceremonies for a team of eight.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>Outcome</h4>
+              <ul>
+                <li>Onboarding shortened from <strong>three weeks to five days</strong>.</li>
+                <li>A complete audit trail put in place.</li>
+                <li>Sign-off from all four teams within a single review cycle.</li>
+                <li>Roadmap presented to the Head of Product and the regional CTO.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="case-metric">↓ 76% reduction in onboarding time</p>
+        </article>
+
+        <!-- 05 -->
+        <article class="case">
+          <div class="case-head">
+            <span class="case-num" aria-hidden="true">05</span>
+            <div class="case-title">
+              <h3>Incident Triage Automation</h3>
+              <p class="case-org">AT&amp;T — Global Network Services</p>
+            </div>
+          </div>
+          <ul class="tags"><li>Automation</li><li>ITIL</li><li>Infrastructure</li></ul>
+
+          <p class="case-overview">
+            The EMEA network support function processed hundreds of incidents each week for enterprise
+            customers, with analysts categorising and routing every ticket by hand. The repetition slowed
+            first response and ate into analyst capacity.
+          </p>
+
+          <div class="case-body">
+            <div class="case-block">
+              <h4>Problem</h4>
+              <ul>
+                <li>Manual categorisation absorbed roughly <strong>6 hours per week</strong> team-wide.</li>
+                <li>Tickets routed to the wrong queue added 2–4 hours to resolution.</li>
+                <li>The team was operating under significant SLA pressure.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>What I did</h4>
+              <ul>
+                <li>Analysed six months of historical incident data to surface the recurring categories.</li>
+                <li>Proposed and specified scripted CRM routing rules.</li>
+                <li>Partnered with the tooling team to deploy automated categorisation workflows.</li>
+              </ul>
+            </div>
+            <div class="case-block">
+              <h4>Outcome</h4>
+              <ul>
+                <li>Eliminated roughly six hours of manual triage per week.</li>
+                <li>Contributed to <strong>99.7% SLA compliance</strong>.</li>
+                <li>Won the AT&amp;T 100% Club Award (top 5%) in two consecutive quarters.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="case-metric">↓ 6hrs/week manual triage eliminated</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ WORK SAMPLES ============================ -->
+  <section class="section section-alt" id="work" aria-labelledby="work-title">
+    <div class="wrap">
+      <p class="eyebrow">03 — Work samples</p>
+      <h2 class="section-title" id="work-title">The actual work</h2>
+      <p class="section-lede">
+        Tooling I've built and artefacts I produce. Client deliverables are described rather than
+        linked — the artefacts themselves are shared on request.
+      </p>
+
+      <div class="grid grid-3">
+
+        <article class="card">
+          <p class="sample-tag">Tool · React</p>
+          <h3>EVA Data Mapper</h3>
+          <p>
+            A single-page app that turns entity-data field mapping from a spreadsheet exercise into a
+            guided process. <strong>60 fields across six categories</strong> extracted from the OpenAPI
+            spec into a typed schema module, each carrying its full JSON path, business meaning and
+            primary/alternative priority. Mapping type, confidence banding and the eight-step
+            methodology are built into the interface rather than living in someone's head.
+          </p>
+          <ul class="tags"><li>React 18</li><li>Vite</li><li>Tailwind</li><li>OpenAPI</li></ul>
+        </article>
+
+        <article class="card">
+          <p class="sample-tag">Enablement · Postman</p>
+          <h3>API Enablement Library</h3>
+          <p>
+            A Postman collection of <strong>50+ use cases</strong> covering EVA, MaxSight, Sanctions
+            360, Orbis and the KYC API, which became the team's standard reference. Two-layer structure
+            — a curated use-case folder for getting started, plus a full endpoint reference for depth —
+            maintained across successive API versions including a v1 → v2 migration.
+          </p>
+          <ul class="tags"><li>Postman</li><li>REST</li><li>OAuth 2.0</li><li>Versioning</li></ul>
+        </article>
+
+        <article class="card">
+          <p class="sample-tag">Enablement · Lifecycle</p>
+          <h3>Compliance Lifecycle Collection</h3>
+          <p>
+            A reference collection walking a migrating compliance customer through the full entity
+            lifecycle — onboard, assess, review, decide, offboard. <strong>Eight use cases, 22
+            requests</strong>, ordered by the operational journey rather than by endpoint, with auth
+            configured once at collection level and the seven handoff IDs modelled as documented
+            variables so every request runs out of the box.
+          </p>
+          <ul class="tags"><li>Postman v2.1</li><li>Async jobs</li><li>Technical writing</li></ul>
+        </article>
+
+        <article class="card">
+          <p class="sample-tag">Process design</p>
+          <h3>BPMN Process Mapping</h3>
+          <p>
+            End-to-end onboarding and invoicing workflows captured in BPMN 2.0 — the artefact that lets
+            compliance, legal, operations and engineering argue about the same process instead of four
+            different mental models of it.
+          </p>
+          <ul class="tags"><li>BPMN 2.0</li><li>MS Visio</li><li>Mural</li></ul>
+        </article>
+
+        <article class="card">
+          <p class="sample-tag">Data visualisation</p>
+          <h3>Power BI Management Dashboards</h3>
+          <p>
+            Automated executive reporting sourced directly from IBM DB2, replacing hand-assembled
+            weekly packs. Cut manual reporting effort by roughly 40% and gave CFOs across CEEMEA and AP
+            live visibility rather than a retrospective.
+          </p>
+          <ul class="tags"><li>Power BI</li><li>IBM DB2</li><li>SQL</li></ul>
+        </article>
+
+        <article class="card">
+          <p class="sample-tag">GitHub</p>
+          <h3>Implementation Tooling &amp; Scripts</h3>
+          <p>
+            Python utilities, SQL queries and reusable templates from implementation and BA work —
+            an API integration validator, an onboarding checklist generator, DB2 reconciliation
+            queries, and a BPMN template library.
+          </p>
+          <ul class="tags"><li>Python</li><li>SQL</li><li>MIT licensed</li></ul>
+          <p class="project-links">
+            <a href="https://github.com/nithyich/implementation-tools" rel="noopener">nithyich/implementation-tools →</a>
+          </p>
+        </article>
+
+        <article class="card">
+          <p class="sample-tag">Documentation</p>
+          <h3>Functional Specs &amp; User Stories</h3>
+          <p>
+            Business requirement documents, functional specifications, acceptance criteria and user
+            story libraries drawn from platform delivery work — written so that what engineering builds
+            and what the client expects are described in the same terms.
+          </p>
+          <ul class="tags"><li>BRD / FSD</li><li>Acceptance criteria</li><li>Agile</li></ul>
+        </article>
+
+        <article class="card">
+          <p class="sample-tag">AI / Analytics</p>
+          <h3>IBM Watson Analytics Challenge</h3>
+          <p>
+            An AI/ML analytics prototype built for IBM's internal innovation challenge, which ranked
+            among the top presentations company-wide.
+          </p>
+          <ul class="tags"><li>Watson</li><li>Analytics</li><li>Prototyping</li></ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ APPROACH ============================ -->
+  <section class="section" id="approach" aria-labelledby="approach-title">
+    <div class="wrap">
+      <p class="eyebrow">04 — Approach</p>
+      <h2 class="section-title" id="approach-title">How I work</h2>
+      <p class="section-lede">
+        Two methods for two halves of the job. Both come from the same instinct: write the rule down,
+        apply it consistently, and make the gaps visible rather than quietly absorbing them.
+      </p>
+
+      <h3 class="approach-heading">Mapping a customer field to a data model</h3>
+      <p class="approach-lede">
+        The methodology encoded in the EVA Data Mapper. It exists because the failure mode in entity
+        data integration is never a missing endpoint — it's a field that was force-fitted to something
+        that looked close enough.
+      </p>
+
+      <ol class="steps">
+        <li class="step">
+          <h3>Start with client intent</h3>
+          <p>Determine what business fact the client actually wants, not just the field name. The label is often misleading — "Company Name" could mean the legal registered name, the trading name, or the international name.</p>
+        </li>
+        <li class="step">
+          <h3>Locate the authoritative concept</h3>
+          <p>Find the canonical concept in the data dictionary — checking definition and business meaning, and whether it is firmographic, legal, an identifier, or relationship-based. A registration number is not a VAT number, an LEI, or a local tax ID.</p>
+        </li>
+        <li class="step">
+          <h3>Validate it exists in the response</h3>
+          <p>Confirm the field truly appears in the actual JSON response, and establish the full path — including whether it is nested, inside an array, or wrapped with metadata. The dictionary and the payload do not always agree.</p>
+        </li>
+        <li class="step">
+          <h3>Choose the most authoritative variant</h3>
+          <p>Rank the candidates by explicit authority rules: legal and registered over inferred, primary over alternative, headquarters over branch.</p>
+        </li>
+        <li class="step">
+          <h3>Identify the mapping type</h3>
+          <p>Classify it — one-to-one, one-to-many where the value is assembled from several fields, complex where a transformation is required, or no-match.</p>
+        </li>
+        <li class="step">
+          <h3>Assign a confidence score</h3>
+          <p>Score on semantic alignment, data-type compatibility, structural complexity, and regulatory fitness. High is an exact semantic and structural match; medium means it works but needs transformation.</p>
+        </li>
+        <li class="step">
+          <h3>Document the full JSON path</h3>
+          <p>Record the complete path from root, including array indices, resolving to the value unless the metadata is genuinely needed. Paths are never abbreviated.</p>
+        </li>
+        <li class="step">
+          <h3>Call out gaps explicitly</h3>
+          <p>If the data model doesn't support a client field, mark it a no-match and say so. Never force-fit. This is what protects data quality, regulatory correctness, and the credibility of the product.</p>
+        </li>
+      </ol>
+
+      <h3 class="approach-heading">Putting governance around a delivery</h3>
+      <p class="approach-lede">
+        Governance earns its cost when it shortens the distance between a problem appearing and the
+        right person hearing about it. Everything below is in service of that; anything that isn't
+        gets cut.
+      </p>
+
+      <ol class="steps">
+        <li class="step">
+          <h3>Name the decisions before the meetings</h3>
+          <p>Start from the decisions the delivery will actually have to make, and work back to who owns each one. A forum without a decision list becomes a status update, and status updates don't unblock anything.</p>
+        </li>
+        <li class="step">
+          <h3>Define what "ready" means in writing</h3>
+          <p>Stage gates need entry and exit criteria set down before anyone is up against the date. Once the deadline is close, criteria written in the moment will always bend towards the answer people want.</p>
+        </li>
+        <li class="step">
+          <h3>Make scope and entitlement explicit</h3>
+          <p>What was contracted, what is being delivered, and what is being consumed are three different numbers. Reconciling them early turns a renewal surprise into a routine conversation.</p>
+        </li>
+        <li class="step">
+          <h3>Size risk against exposure, not anxiety</h3>
+          <p>Rank by plausible impact and likelihood, not by whoever raised it most recently. Every item gets an owner, a mitigation and a review date — an unowned risk is a note, not a control.</p>
+        </li>
+        <li class="step">
+          <h3>Report the same numbers to everyone</h3>
+          <p>One source for status, risk and dependency, reaching commercial, delivery and risk in the same form. Divergent reporting is where disputes start, and reconciling versions costs more than producing one properly.</p>
+        </li>
+        <li class="step">
+          <h3>Escalate on a threshold, not a mood</h3>
+          <p>Agree in advance what breaches the line — slip, spend, severity — so escalation is a rule being followed rather than someone choosing to spend political capital.</p>
+        </li>
+        <li class="step">
+          <h3>Leave it runnable by someone else</h3>
+          <p>Document the cadence, the criteria and the handoffs so the governance survives the person who set it up. If it only works while you're in the room, it hasn't been built yet.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================ TOOLBOX ============================ -->
+  <section class="section section-alt" id="toolbox" aria-labelledby="toolbox-title">
+    <div class="wrap">
+      <p class="eyebrow">Toolbox</p>
+      <h2 class="section-title" id="toolbox-title">What I work with</h2>
+
+      <div class="grid grid-3 toolbox">
+        <div class="tool-group">
+          <h3>APIs &amp; integration</h3>
+          <ul class="tags">
+            <li>REST</li><li>OpenAPI</li><li>JSON Schema</li><li>Postman</li><li>OAuth 2.0</li>
+            <li>Rate limiting &amp; retries</li><li>Async job patterns</li><li>Webhooks</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Data &amp; reporting</h3>
+          <ul class="tags">
+            <li>Power BI</li><li>SQL</li><li>IBM DB2</li><li>Python</li>
+            <li>Data reconciliation</li><li>Dashboards &amp; MI</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Build</h3>
+          <ul class="tags">
+            <li>JavaScript</li><li>React</li><li>Vite</li><li>Tailwind CSS</li>
+            <li>HTML &amp; CSS</li><li>Git</li><li>PowerShell</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Delivery &amp; process</h3>
+          <ul class="tags">
+            <li>Agile / Scrum</li><li>Scaled agile</li><li>Backlog ownership</li>
+            <li>Sprint ceremonies</li><li>BPMN 2.0</li><li>MS Visio</li><li>Mural</li>
+            <li>UAT &amp; test planning</li><li>ITIL</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Governance &amp; risk</h3>
+          <ul class="tags">
+            <li>Governance frameworks</li><li>Stage gates</li><li>RAID logs</li>
+            <li>Change control</li><li>Decision records</li><li>Risk registers</li>
+            <li>Controls design</li><li>Process simplification</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Domain</h3>
+          <ul class="tags">
+            <li>Entity verification</li><li>KYC &amp; onboarding</li><li>Sanctions screening</li>
+            <li>Credit risk</li><li>Compliance workflows</li><li>Ownership data</li>
+            <li>Invoicing &amp; billing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CONTACT ============================ -->
+  <section class="section" id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact">
+      <p class="eyebrow">05 — Contact</p>
+      <h2 class="section-title" id="contact-title">Let's build something</h2>
+      <p class="section-lede">
+        Open to <strong>Senior BA, API Integration Specialist and Implementation Engineer</strong>
+        roles in fintech, regtech, credit risk or enterprise SaaS. Based in Bratislava, Slovakia,
+        holding an EU long-term resident card. Happy to walk through any of the work above in detail.
+      </p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="mailto:nithyich@gmail.com">nithyich@gmail.com</a>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/nithyich" rel="noopener">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/nithyich" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>© <span id="year">2026</span> Nithiesh Thennarasu · Bratislava, Slovakia · EU Long-Term Resident</p>
+    <p><a href="#top">Back to top ↑</a></p>
   </div>
-</section>
-
-<section id="cases" style="background:var(--paper-2);">
-  <span class="section-label reveal">02 — Case Studies</span>
-  <h2 class="section-title reveal">Problems I've solved.<br/>Results I've shipped.</h2>
-  <div class="cases reveal">
-
-    <div class="case-card" onclick="toggleCase(this)">
-      <div class="case-header">
-        <span class="case-num">01</span>
-        <div class="case-meta">
-          <span class="case-company">Moody's Analytics</span>
-          <span class="case-title">Enterprise API Integration — Full Product Suite</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div class="case-tags"><span class="tag">REST API</span><span class="tag">KYC / AML</span><span class="tag">Fintech</span></div>
-          <svg class="case-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <div class="case-body">
-        <p>At Moody's Analytics I lead end-to-end API integration of the full product suite — Entity Verification API (EVA), MaxSight, Sanctions 360, Orbis, and KYC API — into enterprise client systems across banking, insurance, and compliance-heavy industries. Every integration involves navigating complex regulatory requirements, varied client tech stacks, and tight go-live timelines.</p>
-        <div class="case-body-grid">
-          <div class="case-col"><p class="case-col-label">Problem</p><p>Enterprise clients struggled to integrate Moody's APIs independently — authentication failures, schema mismatches, missing use cases, and no standardised onboarding process meant lengthy delays and repeated back-and-forth.</p></div>
-          <div class="case-col"><p class="case-col-label">What I did</p><p>Built a Postman library of 50+ use cases covering all products. Redesigned intake and verification workflows end-to-end. Advised clients on OAuth 2.0, rate limiting, retry logic, and error handling. Performed structured root cause analysis on failing endpoints across auth, schema, and network layers.</p></div>
-          <div class="case-col"><p class="case-col-label">Outcome</p><p>Onboarding time cut from 3 weeks to 5 days. P1 incidents resolved within 48 hours. Postman library adopted as team standard. 3 API enhancement requests fed back into the product roadmap from recurring client pain points.</p></div>
-        </div>
-        <span class="case-outcome">↓ 76% reduction in onboarding time · 48hr P1 resolution</span>
-      </div>
-    </div>
-
-    <div class="case-card" onclick="toggleCase(this)">
-      <div class="case-header">
-        <span class="case-num">02</span>
-        <div class="case-meta">
-          <span class="case-company">IBM International Services Centre</span>
-          <span class="case-title">Global Invoicing Platform Transformation</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div class="case-tags"><span class="tag">Process Design</span><span class="tag">Power BI</span><span class="tag">Mainframe</span></div>
-          <svg class="case-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <div class="case-body">
-        <p>IBM's global invoicing platform processed billing for commercial operations across 140+ countries. Manual reporting required analysts to compile data from multiple mainframe sources every week — error-prone, slow, and invisible to leadership until something broke.</p>
-        <div class="case-body-grid">
-          <div class="case-col"><p class="case-col-label">Problem</p><p>Manual reconciliation across 8 downstream systems took 10+ hours per week per analyst. No real-time visibility. Post-deployment issues took days to diagnose.</p></div>
-          <div class="case-col"><p class="case-col-label">What I did</p><p>Mapped all E2E data flows in BPMN. Built automated Power BI dashboards pulling from IBM DB2. Led UAT and disaster recovery test plans. Managed backlog and 3 major releases.</p></div>
-          <div class="case-col"><p class="case-col-label">Outcome</p><p>~40% reduction in manual reporting effort. Real-time executive visibility for CFOs across CEEMEA and AP. Zero critical defects across 3 platform releases. IBM Q2 CIO Hero award.</p></div>
-        </div>
-        <span class="case-outcome">↑ 40% efficiency gain · IBM CIO Hero 2022</span>
-      </div>
-    </div>
-
-    <div class="case-card" onclick="toggleCase(this)">
-      <div class="case-header">
-        <span class="case-num">03</span>
-        <div class="case-meta">
-          <span class="case-company">TMF Group</span>
-          <span class="case-title">Enterprise Client Onboarding Redesign</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div class="case-tags"><span class="tag">API Integration</span><span class="tag">BPMN</span><span class="tag">Fintech</span></div>
-          <svg class="case-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <div class="case-body">
-        <p>TMF Group's client portal served Fortune 500 accounts including HSBC, JP Morgan, Booking.com, and Worldpay. New client onboarding involved 14 manual handoff steps across compliance, legal, and operations — taking an average of 3 weeks from contract to live.</p>
-        <div class="case-body-grid">
-          <div class="case-col"><p class="case-col-label">Problem</p><p>3-week onboarding SLA was a commercial liability. Duplicate document requests, no status visibility, and manual compliance checks with no audit trail.</p></div>
-          <div class="case-col"><p class="case-col-label">What I did</p><p>Ran discovery workshops across 4 business units. Redesigned intake workflow end-to-end. Specified API integration between document portal and ERP. Produced BPMN 2.0 maps and UAT scripts. Owned product backlog and sprint ceremonies for team of 8.</p></div>
-          <div class="case-col"><p class="case-col-label">Outcome</p><p>Onboarding time reduced from 3 weeks to 5 days. Full audit trail implemented. Stakeholder sign-off achieved across 4 teams in a single review cycle. Roadmap presented to Head of Product and regional CTO.</p></div>
-        </div>
-        <span class="case-outcome">↓ 76% reduction in onboarding time</span>
-      </div>
-    </div>
-
-    <div class="case-card" onclick="toggleCase(this)">
-      <div class="case-header">
-        <span class="case-num">04</span>
-        <div class="case-meta">
-          <span class="case-company">AT&T Global Network Services</span>
-          <span class="case-title">Incident Triage Automation</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div class="case-tags"><span class="tag">Automation</span><span class="tag">ITIL</span><span class="tag">Infrastructure</span></div>
-          <svg class="case-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <div class="case-body">
-        <p>AT&T's EMEA network support team handled hundreds of incidents per week across enterprise clients. Analysts manually categorised and routed every ticket — a repetitive process that delayed first-response time and consumed analyst bandwidth.</p>
-        <div class="case-body-grid">
-          <div class="case-col"><p class="case-col-label">Problem</p><p>Manual ticket categorisation took ~6 hours/week across the team. Mis-routing added 2–4 hour delays to resolution. SLA pressure was high.</p></div>
-          <div class="case-col"><p class="case-col-label">What I did</p><p>Analysed 6 months of incident data to identify recurring categories. Proposed and documented scripted CRM routing rules. Worked with tooling team to implement automated categorisation workflows.</p></div>
-          <div class="case-col"><p class="case-col-label">Outcome</p><p>~6 hours/week of manual triage eliminated. Contributed to 99.7% SLA compliance. Earned AT&T 100% Club Award (top 5%) two consecutive quarters.</p></div>
-        </div>
-        <span class="case-outcome">↓ 6hrs/week manual triage eliminated</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<section id="samples">
-  <span class="section-label reveal">03 — Work Samples</span>
-  <h2 class="section-title reveal">The actual work.</h2>
-  <div class="samples-grid reveal">
-
-    <div class="sample-card">
-      <div class="sample-preview bpmn">
-        <svg class="bpmn-svg" viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="60" width="280" height="24" rx="12" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
-          <circle cx="30" cy="72" r="8" fill="white" stroke="#1A4FBF" stroke-width="1.5"/>
-          <rect x="55" y="62" width="50" height="20" rx="3" fill="white" stroke="#1A4FBF" stroke-width="1"/>
-          <text x="80" y="75" text-anchor="middle" font-size="7" fill="#1A4FBF" font-family="monospace">Receive</text>
-          <line x1="105" y1="72" x2="120" y2="72" stroke="#1A4FBF" stroke-width="1" marker-end="url(#arr)"/>
-          <rect x="120" y="62" width="50" height="20" rx="3" fill="white" stroke="#1A4FBF" stroke-width="1"/>
-          <text x="145" y="75" text-anchor="middle" font-size="7" fill="#1A4FBF" font-family="monospace">Validate</text>
-          <polygon points="185,72 195,62 205,72 195,82" fill="white" stroke="#F59E0B" stroke-width="1.5"/>
-          <line x1="205" y1="72" x2="220" y2="72" stroke="#1A4FBF" stroke-width="1" marker-end="url(#arr)"/>
-          <rect x="220" y="62" width="50" height="20" rx="3" fill="white" stroke="#1A4FBF" stroke-width="1"/>
-          <text x="245" y="75" text-anchor="middle" font-size="7" fill="#1A4FBF" font-family="monospace">Process</text>
-          <circle cx="280" cy="72" r="8" fill="#1A4FBF" stroke="#1A4FBF" stroke-width="2"/>
-          <text x="150" y="50" text-anchor="middle" font-size="8" fill="#6B7280" font-family="monospace">Client Onboarding Flow</text>
-          <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1A4FBF"/></marker></defs>
-        </svg>
-      </div>
-      <div class="sample-info">
-        <p class="sample-type">Process Design</p>
-        <p class="sample-title">BPMN Process Mapping</p>
-        <p class="sample-desc">End-to-end client onboarding and invoicing workflows documented in BPMN 2.0 using MS Visio and Mural.</p>
-      </div>
-    </div>
-
-    <div class="sample-card">
-      <div class="sample-preview api">
-        <div class="api-mock">
-<span class="dim">// GET /api/v1/entity/{id}/verify</span><br/>
-<span class="dim">{</span><br/>
-&nbsp;&nbsp;<span class="key">"product"</span>: <span class="str">"EVA"</span>,<br/>
-&nbsp;&nbsp;<span class="key">"entity_id"</span>: <span class="str">"ENT-00421"</span>,<br/>
-&nbsp;&nbsp;<span class="key">"kyc_status"</span>: <span class="str">"verified"</span>,<br/>
-&nbsp;&nbsp;<span class="key">"sanctions_hit"</span>: <span class="num">false</span>,<br/>
-&nbsp;&nbsp;<span class="key">"confidence_score"</span>: <span class="num">0.97</span><br/>
-<span class="dim">}</span>
-        </div>
-      </div>
-      <div class="sample-info">
-        <p class="sample-type">API Documentation</p>
-        <p class="sample-title">REST API Specs & Integration Guides</p>
-        <p class="sample-desc">Postman library of 50+ use cases covering EVA, MaxSight, Sanctions 360, Orbis, and KYC API — adopted as team standard.</p>
-      </div>
-    </div>
-
-    <div class="sample-card">
-      <div class="sample-preview pbi">
-        <svg class="pbi-bars" viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
-          <text x="150" y="18" text-anchor="middle" font-size="9" fill="#6B7280" font-family="monospace">Invoicing Platform — Weekly Overview</text>
-          <rect x="20" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="20" y="55" width="34" height="55" rx="2" fill="#1A4FBF"/>
-          <rect x="65" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="65" y="45" width="34" height="65" rx="2" fill="#1A4FBF"/>
-          <rect x="110" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="110" y="40" width="34" height="70" rx="2" fill="#1A4FBF"/>
-          <rect x="155" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="155" y="60" width="34" height="50" rx="2" fill="#1A4FBF"/>
-          <rect x="200" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="200" y="35" width="34" height="75" rx="2" fill="#1A4FBF"/>
-          <rect x="245" y="30" width="34" height="80" rx="2" fill="#BFDBFE"/><rect x="245" y="48" width="34" height="62" rx="2" fill="#1A4FBF"/>
-          <line x1="10" y1="110" x2="290" y2="110" stroke="#D1D5DB" stroke-width="0.5"/>
-          <text x="37" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W1</text>
-          <text x="82" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W2</text>
-          <text x="127" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W3</text>
-          <text x="172" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W4</text>
-          <text x="217" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W5</text>
-          <text x="262" y="122" text-anchor="middle" font-size="7" fill="#9CA3AF" font-family="monospace">W6</text>
-        </svg>
-      </div>
-      <div class="sample-info">
-        <p class="sample-type">Data Visualisation</p>
-        <p class="sample-title">Power BI Management Dashboards</p>
-        <p class="sample-desc">Automated executive dashboards pulling from IBM DB2 — reducing manual reporting effort by ~40% for CFOs across CEEMEA and AP regions.</p>
-      </div>
-    </div>
-
-    <div class="sample-card">
-      <div class="sample-preview gh">
-        <div class="gh-preview">
-<span class="green">●</span> <span class="blue">nithyich</span> / implementation-tools<br/>
-<span class="grey">─────────────────────────────</span><br/>
-<span class="green">+</span> api-integration-validator.py<br/>
-<span class="green">+</span> onboarding-checklist-gen.py<br/>
-<span class="green">+</span> db2-reconciliation-query.sql<br/>
-<span class="green">+</span> bpmn-template-library/<br/>
-<span class="grey">main · MIT license</span>
-        </div>
-      </div>
-      <div class="sample-info">
-        <p class="sample-type">GitHub</p>
-        <p class="sample-title">Implementation Tooling & Scripts</p>
-        <p class="sample-desc">Python utilities, SQL queries, and reusable templates from implementation and BA work at Moody's.</p>
-      </div>
-    </div>
-
-    <div class="sample-card">
-      <div class="sample-preview bpmn" style="background:#F0FDF4;">
-        <svg viewBox="0 0 300 140" width="100%" xmlns="http://www.w3.org/2000/svg">
-          <rect x="40" y="20" width="220" height="100" rx="4" fill="white" stroke="#D1FAE5" stroke-width="1.5"/>
-          <rect x="40" y="20" width="220" height="18" rx="4" fill="#D1FAE5"/>
-          <text x="150" y="32" text-anchor="middle" font-size="8" fill="#065F46" font-family="monospace" font-weight="bold">FUNCTIONAL SPECIFICATION</text>
-          <line x1="55" y1="50" x2="245" y2="50" stroke="#E5E7EB" stroke-width="0.5"/>
-          <rect x="55" y="55" width="80" height="5" rx="2" fill="#D1D5DB"/>
-          <rect x="55" y="65" width="120" height="5" rx="2" fill="#D1D5DB"/>
-          <rect x="55" y="75" width="100" height="5" rx="2" fill="#D1D5DB"/>
-          <rect x="55" y="88" width="60" height="5" rx="2" fill="#6EE7B7"/>
-          <rect x="55" y="98" width="90" height="5" rx="2" fill="#D1D5DB"/>
-          <rect x="55" y="108" width="75" height="5" rx="2" fill="#D1D5DB"/>
-        </svg>
-      </div>
-      <div class="sample-info">
-        <p class="sample-type">Documentation</p>
-        <p class="sample-title">Functional Specs & User Stories</p>
-        <p class="sample-desc">BRDs, functional specifications, acceptance criteria, and user story libraries from IBM and TMF engagements.</p>
-      </div>
-    </div>
-
-    <div class="sample-card">
-      <div class="sample-preview" style="background:#1E1B4B;">
-        <svg viewBox="0 0 300 140" width="100%" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="150" cy="70" r="50" fill="none" stroke="#4F46E5" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="150" cy="70" r="35" fill="none" stroke="#6366F1" stroke-width="0.5" opacity="0.6"/>
-          <circle cx="150" cy="70" r="20" fill="none" stroke="#818CF8" stroke-width="0.5" opacity="0.8"/>
-          <circle cx="150" cy="70" r="6" fill="#818CF8"/>
-          <circle cx="150" cy="20" r="4" fill="#C7D2FE"/>
-          <circle cx="193" cy="45" r="3" fill="#A5B4FC"/>
-          <circle cx="193" cy="95" r="5" fill="#6366F1"/>
-          <circle cx="150" cy="120" r="3" fill="#C7D2FE"/>
-          <circle cx="107" cy="95" r="4" fill="#818CF8"/>
-          <circle cx="107" cy="45" r="3" fill="#A5B4FC"/>
-          <line x1="150" y1="70" x2="150" y2="20" stroke="#6366F1" stroke-width="0.5" opacity="0.6"/>
-          <line x1="150" y1="70" x2="193" y2="45" stroke="#6366F1" stroke-width="0.5" opacity="0.6"/>
-          <line x1="150" y1="70" x2="193" y2="95" stroke="#6366F1" stroke-width="0.5" opacity="0.6"/>
-          <line x1="150" y1="70" x2="107" y2="45" stroke="#6366F1" stroke-width="0.5" opacity="0.6"/>
-          <text x="150" y="135" text-anchor="middle" font-size="8" fill="#818CF8" font-family="monospace">IBM Watson Analytics Challenge</text>
-        </svg>
-      </div>
-      <div class="sample-info">
-        <p class="sample-type">AI / Analytics</p>
-        <p class="sample-title">IBM Watson Analytics Challenge</p>
-        <p class="sample-desc">AI/ML-powered analytics prototype — ranked in top presentations company-wide at IBM's internal innovation challenge.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<section id="contact" style="background:var(--ink);">
-  <div class="contact-inner">
-    <div class="contact-left reveal">
-      <h2 style="color:white;">Let's build<br/><em style="font-family:var(--serif);font-style:italic;color:#93C5FD;">something.</em></h2>
-      <p style="color:#9CA3AF;">Open to Senior BA, API Integration Specialist, and Implementation Engineer roles — ideally in fintech, regtech, credit risk, or enterprise SaaS. Based in Madrid. EU long-term resident card holder.</p>
-    </div>
-    <div class="contact-links reveal">
-      <a class="contact-link" href="mailto:nithyich@gmail.com" style="background:#161616;border-color:#2A2A2A;">
-        <div class="contact-link-icon" style="background:#2A2A2A;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#93C5FD" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-        </div>
-        <div class="contact-link-text">
-          <span class="contact-link-label" style="color:#6B7280;">Email</span>
-          <span class="contact-link-value" style="color:white;">nithyich@gmail.com</span>
-        </div>
-      </a>
-      <a class="contact-link" href="https://linkedin.com/in/nithyich" target="_blank" style="background:#161616;border-color:#2A2A2A;">
-        <div class="contact-link-icon" style="background:#2A2A2A;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#93C5FD" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        </div>
-        <div class="contact-link-text">
-          <span class="contact-link-label" style="color:#6B7280;">LinkedIn</span>
-          <span class="contact-link-value" style="color:white;">linkedin.com/in/nithyich</span>
-        </div>
-      </a>
-      <a class="contact-link" href="https://github.com/nithyich" target="_blank" style="background:#161616;border-color:#2A2A2A;">
-        <div class="contact-link-icon" style="background:#2A2A2A;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#93C5FD" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        </div>
-        <div class="contact-link-text">
-          <span class="contact-link-label" style="color:#6B7280;">GitHub</span>
-          <span class="contact-link-value" style="color:white;">github.com/nithyich</span>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<footer style="background:var(--ink);border-top:1px solid #2A2A2A;">
-  <p style="color:#4B5563;">© 2026 Nithiesh Thennarasu</p>
-  <p style="color:#4B5563;">Madrid, Spain · EU Long-Term Resident</p>
 </footer>
 
-<script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        entry.target.querySelectorAll('.skill-row').forEach((row, j) => {
-          setTimeout(() => row.classList.add('visible'), j * 100);
-        });
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  function toggleCase(card) {
-    const body = card.querySelector('.case-body');
-    const isOpen = card.classList.contains('open');
-    document.querySelectorAll('.case-card').forEach(c => {
-      c.classList.remove('open');
-      c.querySelector('.case-body').classList.remove('open');
-    });
-    if (!isOpen) { card.classList.add('open'); body.classList.add('open'); }
-  }
-</script>
+<script src="main.js"></script>
 </body>
 </html>
